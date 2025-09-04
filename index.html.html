@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI x Education — Blog</title>
+  <meta name="description" content="A clean, responsive blog about how AI is transforming education. Built with HTML, Tailwind CSS, and Three.js." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2m1 15h-2v-2h2zm0-4h-2V7h2z'/%3E%3C/svg%3E">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81'
+            },
+          },
+          boxShadow: {
+            soft: '0 10px 30px rgba(0,0,0,0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Helpful for smooth rendering of the canvas */
+    canvas { display:block; }
+  </style>
+</head>
+<body class="h-full bg-white text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100">
+  <!-- Header / Navbar -->
+  <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+        <a href="#" class="flex items-center gap-2 font-bold tracking-tight">
+          <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-primary-600 text-white">AI</span>
+          <span class="text-lg">AI x Education</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a class="hover:text-primary-600" href="#posts">Posts</a>
+          <a class="hover:text-primary-600" href="#about">About</a>
+          <a class="hover:text-primary-600" href="#contact">Contact</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input id="themeToggle" type="checkbox" class="sr-only peer" />
+            <div class="w-12 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:bg-primary-600 transition-colors"></div>
+            <span class="absolute left-1 top-1 h-4 w-4 bg-white rounded-full shadow translate-x-0 peer-checked:translate-x-6 transition-transform"></span>
+          </label>
+          <button id="openSearch" class="hidden sm:inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm hover:shadow-soft">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <span>Search</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero with Three.js background -->
+  <section class="relative isolate">
+    <div class="absolute inset-0 -z-10">
+      <canvas id="hero-canvas" class="h-[460px] w-full"></canvas>
+    </div>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
+        <div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">How AI is Transforming Education</h1>
+          <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">From personalized learning to 24/7 study help, explore friendly, research-backed insights and practical tools for first‑year students.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#posts" class="inline-flex items-center rounded-2xl bg-primary-600 px-5 py-3 text-white font-medium shadow-soft hover:bg-primary-700">Explore Posts</a>
+            <a href="#subscribe" class="inline-flex items-center rounded-2xl border border-slate-200 dark:border-slate-800 px-5 py-3 font-medium hover:shadow-soft">Subscribe</a>
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <div class="rounded-3xl border border-slate-200 dark:border-slate-800 p-6 bg-white/70 dark:bg-slate-900/60 shadow-soft">
+            <h2 class="text-xl font-semibold">Featured Post</h2>
+            <p class="mt-2 text-slate-600 dark:text-slate-300">Smarter Notes, Smarter Exams: AI Tools Every Fresher Should Try</p>
+            <button id="openFeatured" class="mt-4 inline-flex items-center rounded-xl px-4 py-2 border border-slate-200 dark:border-slate-800 hover:shadow-soft">Read now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Posts -->
+  <main id="posts" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex items-end justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-bold">Latest Posts</h2>
+        <p class="text-slate-600 dark:text-slate-300">Curated reads for first‑year students.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <input id="searchInput" type="text" placeholder="Search posts…" class="w-56 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+      </div>
+    </div>
+
+    <div id="cards" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <!-- Pagination (dummy for demo) -->
+    <div class="mt-10 flex justify-center">
+      <button class="rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2 text-sm hover:shadow-soft">Load more</button>
+    </div>
+  </main>
+
+  <!-- About -->
+  <section id="about" class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
+    <h3 class="text-xl font-semibold">About This Blog</h3>
+    <p class="mt-2 text-slate-600 dark:text-slate-300">This student-friendly blog explores how AI is reshaping learning. Expect clear explainers, practical tool roundups, and ethical discussions—without the jargon.</p>
+  </section>
+
+  <!-- Subscribe -->
+  <section id="subscribe" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+    <div class="rounded-3xl border border-slate-200 dark:border-slate-800 p-8 md:p-12 bg-gradient-to-br from-primary-50 to-white dark:from-slate-900 dark:to-slate-950">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div class="md:col-span-2">
+          <h3 class="text-2xl font-bold">Get new posts in your inbox</h3>
+          <p class="mt-2 text-slate-600 dark:text-slate-300">Monthly digest. No spam. Unsubscribe anytime.</p>
+        </div>
+        <form class="flex gap-3">
+          <input type="email" required placeholder="you@example.com" class="flex-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 px-3 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+          <button type="submit" class="rounded-xl bg-primary-600 px-5 py-3 text-white font-medium hover:bg-primary-700">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
+    <h3 class="text-xl font-semibold">Contact</h3>
+    <p class="mt-2 text-slate-600 dark:text-slate-300">Questions or collaboration ideas? Email us at <a href="mailto:hello@aixedu.example" class="text-primary-600 hover:underline">hello@aixedu.example</a>.</p>
+  </section>
+
+  <footer class="mt-20 border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-slate-500 dark:text-slate-400 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p>© <span id="year"></span> AI x Education. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="#" class="hover:text-primary-600">Privacy</a>
+        <a href="#" class="hover:text-primary-600">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Post Modal -->
+  <div id="modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50" data-close="true"></div>
+    <div class="absolute inset-x-0 top-10 mx-auto max-w-3xl rounded-3xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-soft p-6 md:p-8">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 id="modalTitle" class="text-2xl font-bold"></h3>
+          <p id="modalMeta" class="mt-1 text-sm text-slate-500"></p>
+        </div>
+        <button class="rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2" data-close="true">Close</button>
+      </div>
+      <article id="modalContent" class="prose prose-slate dark:prose-invert max-w-none mt-6"></article>
+    </div>
+  </div>
+
+  <!-- Three.js + App Scripts -->
+  <script type="module">
+    // --- Dark mode toggle ---
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.classList.add('dark');
+      themeToggle.checked = true;
+    }
+    themeToggle.addEventListener('change', () => {
+      root.classList.toggle('dark');
+      localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // --- Year ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // --- Search modal shortcut (Ctrl/Cmd+K) ---
+    const openSearch = document.getElementById('openSearch');
+    openSearch?.addEventListener('click', () => document.getElementById('searchInput').focus());
+    window.addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); document.getElementById('searchInput').focus(); }});
+
+    // --- Blog data ---
+    const posts = [
+      {
+        title: 'AI in Education: How It’s Changing the Way We Learn',
+        tag: 'Overview',
+        date: '2025-08-01',
+        read: '6 min',
+        excerpt: 'A beginner-friendly tour of the biggest changes AI brings to classrooms and campus life.',
+        content: `<p>AI is reshaping learning through personalization, automation, and accessibility. From adaptive quizzes to smart note tools, students can focus more on understanding and less on repetitive tasks.</p>
+        <h4>Key shifts</h4><ul><li>Adaptive practice based on performance</li><li>Instant feedback on writing and code</li><li>24/7 study assistance via chatbots</li></ul>`
+      },
+      {
+        title: 'Smarter Notes, Smarter Exams: AI Tools Every Fresher Should Try',
+        tag: 'Tools',
+        date: '2025-08-05',
+        read: '8 min',
+        excerpt: 'Capture, summarize, and quiz yourself with friendly AI companions.',
+        content: `<p>Try note helpers and flashcard generators to turn lectures into active recall practice. Combine them with your own understanding—AI assists; you decide.</p>`
+      },
+      {
+        title: 'Personalized Learning: Study at Your Own Pace',
+        tag: 'Learning',
+        date: '2025-08-10',
+        read: '7 min',
+        excerpt: 'Adaptive platforms suggest what to learn next, so you’re never bored or lost.',
+        content: `<p>Adaptive systems analyze progress and recommend targeted practice—great for bridging the jump to college-level study.</p>`
+      },
+      {
+        title: 'Faster Feedback: Learn from Mistakes Immediately',
+        tag: 'Skills',
+        date: '2025-08-12',
+        read: '5 min',
+        excerpt: 'Real-time hints for essays and code cut the wait time and reduce stress.',
+        content: `<p>Instant writing suggestions and code diagnostics help you correct errors while the context is fresh.</p>`
+      },
+      {
+        title: '24/7 Access: Study Help Whenever You Need It',
+        tag: 'Campus life',
+        date: '2025-08-15',
+        read: '5 min',
+        excerpt: 'Night owl or early bird—AI tutors are always awake.',
+        content: `<p>Whether it’s midnight exam prep or a quick recap at dawn, on-demand assistants answer questions and explain concepts.</p>`
+      },
+      {
+        title: 'Mind the Gaps: Using AI Ethically and Well',
+        tag: 'Ethics',
+        date: '2025-08-18',
+        read: '6 min',
+        excerpt: 'Avoid over-reliance, check sources, and keep your critical thinking sharp.',
+        content: `<p>AI can sometimes be inaccurate or biased. Cross-check and use it to augment—not replace—your learning.</p>`
+      }
+    ];
+
+    // --- Render cards ---
+    const cards = document.getElementById('cards');
+    function render(list) {
+      cards.innerHTML = '';
+      list.forEach((p, i) => {
+        const el = document.createElement('article');
+        el.className = 'rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 p-6 hover:shadow-soft transition-shadow flex flex-col';
+        el.innerHTML = `
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <span class="rounded-full bg-primary-100 dark:bg-primary-900/40 px-2 py-1 text-primary-700 dark:text-primary-300">${p.tag}</span>
+            <span>•</span>
+            <time>${new Date(p.date).toLocaleDateString()}</time>
+            <span>•</span>
+            <span>${p.read}</span>
+          </div>
+          <h3 class="mt-3 text-lg font-semibold leading-snug">${p.title}</h3>
+          <p class="mt-2 text-slate-600 dark:text-slate-300">${p.excerpt}</p>
+          <div class="mt-4 flex-1"></div>
+          <div class="mt-4">
+            <button data-index="${i}" class="readMore inline-flex items-center rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2 text-sm hover:shadow-soft">Read more</button>
+          </div>`;
+        cards.appendChild(el);
+      });
+      // Bind events
+      document.querySelectorAll('.readMore').forEach(btn => btn.addEventListener('click', (e) => openPost(e.currentTarget.getAttribute('data-index'))));
+    }
+    render(posts);
+
+    // --- Search ---
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = posts.filter(p => (p.title + ' ' + p.excerpt + ' ' + p.tag).toLowerCase().includes(q));
+      render(filtered);
+    });
+
+    // --- Modal logic ---
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMeta = document.getElementById('modalMeta');
+    const modalContent = document.getElementById('modalContent');
+    function openPost(index) {
+      const p = posts[index];
+      modalTitle.textContent = p.title;
+      modalMeta.textContent = `${p.tag} • ${new Date(p.date).toLocaleDateString()} • ${p.read} read`;
+      modalContent.innerHTML = p.content;
+      modal.classList.remove('hidden');
+    }
+    modal.addEventListener('click', (e) => { if (e.target.dataset.close !== undefined) modal.classList.add('hidden'); });
+    document.getElementById('openFeatured').addEventListener('click', () => openPost(1));
+
+    // --- Three.js Hero Background ---
+    import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
+
+    const canvas = document.getElementById('hero-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / 460, 0.1, 100);
+    camera.position.set(0, 0, 8);
+
+    // Lights
+    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+    const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+    dir.position.set(5, 8, 5);
+    scene.add(ambient, dir);
+
+    // Geometry: wireframe icosahedron + floating particles
+    const ico = new THREE.IcosahedronGeometry(2.2, 1);
+    const mat = new THREE.MeshPhongMaterial({ color: 0x6366f1, wireframe: true, transparent: true, opacity: 0.6 });
+    const mesh = new THREE.Mesh(ico, mat);
+    scene.add(mesh);
+
+    const particleGeo = new THREE.BufferGeometry();
+    const count = 800;
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count * 3; i += 3) {
+      const r = 6 + Math.random() * 6;
+      const phi = Math.random() * Math.PI * 2;
+      const theta = Math.acos(2 * Math.random() - 1);
+      positions[i] = r * Math.sin(theta) * Math.cos(phi);
+      positions[i + 1] = r * Math.sin(theta) * Math.sin(phi);
+      positions[i + 2] = r * Math.cos(theta);
+    }
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particleMat = new THREE.PointsMaterial({ size: 0.05, color: 0x93c5fd, transparent: true, opacity: 0.9 });
+    const particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
+
+    function resize() {
+      const width = canvas.clientWidth;
+      const height = 460; // fixed hero height for simplicity
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    let t = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      t += 0.003;
+      mesh.rotation.x += 0.003;
+      mesh.rotation.y += 0.004;
+      particles.rotation.y -= 0.0008;
+      const s = 1 + Math.sin(t) * 0.03;
+      mesh.scale.set(s, s, s);
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
